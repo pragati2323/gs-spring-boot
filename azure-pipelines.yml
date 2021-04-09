@@ -14,40 +14,40 @@ stages:
     displayName: Build-Application
     jobs:
       - job: Build_App
-    steps:
-    - task: Maven@3
-      inputs:
-        mavenPomFile: 'app/pom.xml'
-        mavenOptions: '-Xmx3072m'
-        javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '1.8'
-        jdkArchitectureOption: 'x64'
-        publishJUnitResults: true
-        testResultsFiles: '**/surefire-reports/TEST-*.xml'
-        goals: 'package'
+        steps:
+          - task: Maven@3
+            inputs:
+              mavenPomFile: 'app/pom.xml'
+              mavenOptions: '-Xmx3072m'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: '1.8'
+              jdkArchitectureOption: 'x64'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              goals: 'package'
 
 
   - stage: Copy
     displayName: Copy files
     jobs:
       - job: Copy
-    steps:
-    - task: CopyFiles@2
-      inputs:
-          SourceFolder: '$(System.defaultworkingdirectory)'
-          Contents: '**/*.jar*'
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        steps:
+        - task: CopyFiles@2
+          inputs:
+              SourceFolder: '$(System.defaultworkingdirectory)'
+              Contents: '**/*.jar*'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
   
   - stage: Artifact 
     displayName: Artifact generated
     jobs:
       - job: Artifact
-    steps:
+        steps:
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
+        - task: PublishBuildArtifacts@1
+          inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
 
